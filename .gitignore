@@ -1,0 +1,12 @@
+﻿# Default ignored files
+/shelf/
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+.idea/*
+src/main/resources/application.properties
+target
+src/main/java/fr/utc/.DS_Store
+.idea/misc.xml

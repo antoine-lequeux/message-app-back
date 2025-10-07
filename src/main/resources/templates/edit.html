@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Accueil</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+<button id="theme-toggle" class="theme-toggle" aria-label="Basculer thème">
+    <i data-feather="sun" class="toggle-icon icon-sun"></i>
+    <i data-feather="moon" class="toggle-icon icon-moon"></i>
+</button>
+
+<div class="card">
+    <div class="header-bar">
+        <h2>Modifier l'utilisateur</h2>
+        <form th:action="@{/home}" method="get">
+            <button type="submit" class="back-icon return-icon" title="Retour">
+                <i data-feather="arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <section class="form-section">
+        <form th:action="@{/home/edit/{id}/submit(id=${user.usersID})}" method="post" class="user-form">
+            <div class="form-group">
+                <label for="firstName">Prénom :</label>
+                <input type="text" id="firstName" name="firstName" th:value="${user.firstName}" required />
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Nom :</label>
+                <input type="text" id="lastName" name="lastName" th:value="${user.lastName}" required />
+            </div>
+
+            <div class="form-group">
+                <label for="mail">Email :</label>
+                <input type="email" id="mail" name="email" th:value="${user.mail}" required />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+
+            <div class="form-group">
+                <label for="avatar">Avatar :</label>
+                <div id="drop-zone" class="drop-zone">
+                    Glissez votre image ici ou cliquez pour choisir un fichier.
+                </div>
+                <input type="file" id="avatar" accept="image/*" style="display: none;" />
+                <input type="hidden" name="avatarBase64" id="avatarBase64" />
+            </div>
+
+            <ul id="password-rules" class="password-rules">
+                <li id="rule-length">15 caractères minimum</li>
+                <li id="rule-uppercase">1 majuscule minimum</li>
+                <li id="rule-digit">3 chiffres minimum</li>
+                <li id="rule-special">2 caractères spéciaux minimum</li>
+            </ul>
+
+            <div class="form-group">
+                <label>Administrateur :</label>
+                <div class="radio-buttons">
+                    <label class="radio-option">
+                        <input type="radio" name="admin" value="true" th:checked="${user.admin}" /> Oui
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="admin" value="false" th:checked="${!user.admin}" /> Non
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="primary" id="submitBtn" disabled>Valider</button>
+
+            <p class="success-message" th:if="${message}" th:text="${message}"></p>
+            <p class="error-message" th:if="${error}" th:text="${error}"></p>
+        </form>
+    </section>
+
+    <p class="success-message" th:if="${message}" th:text="${message}" style="color: green;"></p>
+</div>
+
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+    feather.replace();
+</script>
+
+<script>
+    const toggle = document.getElementById('theme-toggle');
+    const bodyEl = document.body;
+
+    if (localStorage.getItem('theme') === 'dark') {
+        bodyEl.classList.add('dark-mode');
+    }
+
+    toggle.addEventListener('click', () => {
+        const nowDark = bodyEl.classList.toggle('dark-mode');
+        localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+    });
+</script>
+
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('avatar');
+    const avatarBase64Input = document.getElementById('avatarBase64');
+
+    dropZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropZone.style.backgroundColor = '#eee';
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.backgroundColor = '';
+    });
+
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.style.backgroundColor = '';
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            encodeImageFileAsBase64(file);
+        }
+    });
+
+    dropZone.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (file && file.type.startsWith('image/')) {
+            encodeImageFileAsBase64(file);
+        }
+    });
+
+    function encodeImageFileAsBase64(file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64 = reader.result.split(',')[1];
+            avatarBase64Input.value = base64;
+            dropZone.textContent = "Image chargée : " + file.name;
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+
+<script>
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
+    const rulesList = document.getElementById('password-rules');
+
+    const rules = {
+        length:    document.getElementById('rule-length'),
+        uppercase: document.getElementById('rule-uppercase'),
+        digit:     document.getElementById('rule-digit'),
+        special:   document.getElementById('rule-special')
+    };
+
+    rulesList.style.display = 'none';
+    submitBtn.disabled = true;
+
+    passwordInput.addEventListener('input', () => {
+        const val = passwordInput.value;
+
+        const cond = {
+            length:    val.length >= 15,
+            uppercase: /[A-Z]/.test(val),
+            digit:     (val.match(/[0-9]/g) || []).length >= 3,
+            special:   (val.match(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g) || []).length >= 2
+        };
+
+        if (val.length === 0) {
+            rulesList.style.display = 'none';
+            Object.values(rules).forEach(r => r.style.display = 'list-item');
+            submitBtn.disabled = true;
+            return;
+        }
+
+        let anyVisible = false;
+        Object.entries(cond).forEach(([k, ok]) => {
+            if (ok) {
+                rules[k].style.display = 'none';
+            } else {
+                rules[k].style.display = 'list-item';
+                rules[k].style.color = 'red';
+                anyVisible = true;
+            }
+        });
+
+        rulesList.style.display = anyVisible ? 'block' : 'none';
+        submitBtn.disabled = !Object.values(cond).every(Boolean);
+    });
+</script>
+</body>
+</html>

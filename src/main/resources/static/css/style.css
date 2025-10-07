@@ -1,0 +1,438 @@
+﻿/* ==========================================================================
+   1. Variables & Palette
+   ========================================================================== */
+:root {
+    /* Light theme colors */
+    --bg-page:             #f5f7fa;
+    --bg-card:             #ffffff;
+    --fg-text:             #333333;
+    --fg-text-sub:         #555555;
+    --input-bg:            #ffffff;
+    --border-color:        #cccccc;
+    --btn-primary:         #5b9bd5;
+    --btn-primary-hover:   #4178b8;
+    --btn-success:         #52b458;
+    --btn-success-hover:   #509f29;
+    --btn-danger:          #e74c3c;
+    --btn-danger-hover:    #c0392b;
+    --icon-color:          #ffffff;
+    --table-header-color:  #a1b5cb;
+
+    --radius:              12px;
+    --shadow:              0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+    --bg-page:             #2E3440;
+    --bg-card:             #3B4252;
+    --fg-text:             #ECEFF4;
+    --fg-text-sub:         #D8DEE9;
+    --input-bg:            #434C5E;
+    --border-color:        #4C566A;
+    --btn-primary:         #88C0D0;
+    --btn-primary-hover:   #81A1C1;
+    --btn-success:         #71cc74;
+    --btn-success-hover:   #6c9f51;
+    --btn-danger:          #BF616A;
+    --btn-danger-hover:    #A54242;
+    --icon-color:          #ECEFF4;
+    --table-header-color:  #4d5969;
+}
+
+/* ==========================================================================
+   2. Reset & Scrollbar Styling
+   ========================================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow-y: scroll; /* reserve space for scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--btn-primary) transparent;
+}
+
+/* WebKit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--btn-primary);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--btn-primary-hover);
+}
+
+/* ==========================================================================
+   3. Base & Layout
+   ========================================================================== */
+body {
+    min-height: 100vh;
+    background: var(--bg-page);
+    color: var(--fg-text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--fg-text);
+    transition: opacity 0.2s;
+}
+.theme-toggle:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   4. Cards
+   ========================================================================== */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 900px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+}
+
+.card--narrow {
+    max-width: 400px;
+}
+
+/* ==========================================================================
+   5. Header & Logout Icon / Back Icon
+   ========================================================================== */
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-bar h2 {
+    color: var(--fg-text);
+}
+
+.return-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.return-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--fg-text-sub);
+    stroke-width: 2.5;
+    transition: stroke 0.2s;
+}
+
+.logout-icon:hover svg {
+    stroke: var(--btn-danger);
+}
+
+.back-icon:hover svg {
+    stroke: var(--btn-primary-hover);
+}
+
+
+/* ==========================================================================
+   6. Forms & Inputs
+   ========================================================================== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drop-zone {
+    border: 2px dashed #ccc;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+.drop-zone:hover {
+    background-color: var(--btn-primary);
+}
+
+label {
+    color: var(--fg-text-sub);
+    font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: var(--fg-text);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--btn-primary);
+}
+
+/* Radio buttons */
+.radio-buttons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--fg-text-sub);
+    font-size: 0.95rem;
+}
+.radio-option input {
+    accent-color: var(--btn-primary);
+    width: 18px;
+    height: 18px;
+}
+
+/* ==========================================================================
+   7. Buttons
+   ========================================================================== */
+button {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    color: var(--icon-color);
+}
+button:active {
+    transform: scale(0.97);
+}
+
+button.primary {
+    background: var(--btn-primary);
+}
+button.primary:hover {
+    background: var(--btn-primary-hover);
+}
+
+button.danger {
+    background: var(--btn-danger);
+}
+button.danger:hover {
+    background: var(--btn-danger-hover);
+}
+
+/* ==========================================================================
+   8. Password Rules & Messages
+   ========================================================================== */
+.password-rules {
+    list-style: none;
+    margin: 8px 0 16px;
+    padding-left: 0;
+    font-size: 0.85rem;
+    color: var(--btn-danger);
+}
+.password-rules li {
+    margin-bottom: 4px;
+}
+
+.error-message,
+.success-message {
+    text-align: center;
+    font-size: 0.9rem;
+}
+.error-message {
+    color: var(--btn-danger);
+}
+.success-message {
+    color: #A3BE8C; /* soft green */
+}
+
+/* ==========================================================================
+   9. Registration Link
+   ========================================================================== */
+.register-link {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--fg-text-sub);
+}
+.register-link a {
+    color: var(--btn-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.register-link a:hover {
+    color: var(--btn-primary-hover);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+ 10. User Table
+   ========================================================================== */
+.table-section h3 {
+    color: var(--fg-text);
+    margin-bottom: 12px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    font-size: 0.95rem;
+    background: var(--bg-card);
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px 10px;
+    text-align: left;
+}
+.user-table th {
+    background-color: var(--table-header-color);
+    color: var(--fg-text);
+}
+.user-table tr:nth-child(even) {
+    background-color: rgba(0,0,0,0.05);
+}
+.user-table tr:hover {
+    background: rgba(0,0,0,0.08);
+}
+
+/* ==========================================================================
+ 11. Action Buttons (Edit/Delete)
+   ========================================================================== */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    color: var(--icon-color);
+    text-decoration: none;
+}
+
+.action-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+/* Edit icon */
+.action-btn--edit {
+    background: var(--btn-primary);
+}
+.action-btn--edit:hover {
+    background: var(--btn-primary-hover);
+}
+
+/* Delete icon */
+.action-btn--delete {
+    background: var(--btn-danger);
+}
+.action-btn--delete:hover {
+    background: var(--btn-danger-hover);
+    opacity: 0.9;
+}
+
+/* ==========================================================================
+ 12. Boolean Icons (Feather)
+   ========================================================================== */
+.feather-icon {
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+}
+
+.bool-indicator {
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    stroke-width: 2;
+}
+
+.success-icon {
+    stroke: var(--btn-success);
+}
+
+.error-icon {
+    stroke: var(--btn-danger);
+}
+
+/* ───────── Toggle Theme Icons ───────── */
+
+/* Par défaut (mode clair) : on affiche la lune, on cache le soleil */
+.icon-sun  { display: none; }
+.icon-moon { display: inline-block; }
+
+/* En mode sombre, on inverse */
+body.dark-mode .icon-sun  { display: inline-block; }
+body.dark-mode .icon-moon { display: none; }
+
+/* Taille et couleur communes */
+.toggle-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;  /* prendra la couleur du bouton */
+    color: #444;           /* ou var(--fg-text-sub) pour rester dans le thème */
+}
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}

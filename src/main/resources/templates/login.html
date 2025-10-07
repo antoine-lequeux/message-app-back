@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Connexion</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+<button id="theme-toggle" class="theme-toggle" aria-label="Basculer thème">
+    <i data-feather="sun" class="toggle-icon icon-sun"></i>
+    <i data-feather="moon" class="toggle-icon icon-moon"></i>
+</button>
+
+<form th:action="@{/login}" method="post" class="card card--narrow">
+    <h2>Connexion</h2>
+
+    <div class="form-group">
+        <label for="username">Adresse email :</label>
+        <input type="email" id="username" name="username" required />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required />
+    </div>
+
+    <button type="submit" class="primary">Se connecter</button>
+
+    <p th:if="${param.error}" class="error-message">Identifiants invalides.</p>
+    <p th:if="${param.logout}" class="success-message">Déconnecté avec succès.</p>
+    <p th:if="${param.accessDenied}" class="error-message">Vous n'avez pas accès à cette page.</p>
+</form>
+
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+    feather.replace();
+</script>
+<script>
+    const toggle = document.getElementById('theme-toggle');
+    const bodyEl = document.body;
+
+    if (localStorage.getItem('theme') === 'dark') {
+        bodyEl.classList.add('dark-mode');
+    }
+
+    toggle.addEventListener('click', () => {
+        const nowDark = bodyEl.classList.toggle('dark-mode');
+        localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+    });
+</script>
+</body>
+</html>
